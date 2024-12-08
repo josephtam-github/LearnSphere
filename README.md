@@ -1,2 +1,0 @@
-# LearnSphere
-API for LearnSphere 
