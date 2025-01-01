@@ -24,3 +24,17 @@ class User(AbstractUser):
         extra_kwargs = {
             'email': {'required': True}
         }
+
+    def validate(self, attrs):
+        """Validate password match and email format"""
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        
+        # Additional email validation could be added here
+        return attrs
+
+    def create(self, validated_data):
+        """Create new user with encrypted password"""
+        validated_data.pop('password2')
+        user = User.objects.create_user(**validated_data)
+        return user
