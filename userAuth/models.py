@@ -16,25 +16,3 @@ class User(AbstractUser):
     # Required for extending AbstractUser
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
-
-    class Meta:
-        model = User
-        fields = ('email', 'username', 'password', 'password2', 'date_of_birth', 
-                 'country', 'native_language')
-        extra_kwargs = {
-            'email': {'required': True}
-        }
-
-    def validate(self, attrs):
-        """Validate password match and email format"""
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-        
-        # Additional email validation could be added here
-        return attrs
-
-    def create(self, validated_data):
-        """Create new user with encrypted password"""
-        validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
-        return user
