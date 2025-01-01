@@ -16,3 +16,22 @@ class User(AbstractUser):
     # Required for extending AbstractUser
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+class UserProfile(models.Model):
+    """Additional user preferences and learning goals"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    daily_goal_minutes = models.IntegerField(default=15)
+    preferred_learning_time = models.CharField(
+        max_length=20,
+        choices=[
+            ('morning', 'Morning'),
+            ('afternoon', 'Afternoon'),
+            ('evening', 'Evening'),
+        ],
+        default='morning'
+    )
+    target_languages = models.JSONField(default=list)  # List of language codes
+    notification_preferences = models.JSONField(default=dict)
+    
+    def __str__(self):
+        return f"{self.user.email}'s Profile"
