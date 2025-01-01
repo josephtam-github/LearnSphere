@@ -35,3 +35,10 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"{self.user.email}'s Profile"
+    
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Automatically create a profile when a new user is registered"""
+    if created:
+        UserProfile.objects.create(user=instance)
