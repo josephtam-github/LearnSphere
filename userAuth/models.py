@@ -16,3 +16,11 @@ class User(AbstractUser):
     # Required for extending AbstractUser
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
+
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'password', 'password2', 'date_of_birth', 
+                 'country', 'native_language')
+        extra_kwargs = {
+            'email': {'required': True}
+        }
