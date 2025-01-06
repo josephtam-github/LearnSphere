@@ -17,6 +17,28 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+     # Add related_names to avoid reverse accessor clashes
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_user_set',
+        blank=True,
+        verbose_name='groups',
+        help_text='The groups this user belongs to.',
+    )
+     
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_user_set',
+        blank=True,
+        verbose_name='user permissions',
+        help_text='Specific permissions for this user.',
+    )
+    
+    class Meta:
+        db_table = 'custom_user'
+        verbose_name = 'user'
+        verbose_name_plural = 'users'
+
 class UserProfile(models.Model):
     """Additional user preferences and learning goals"""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
