@@ -36,3 +36,38 @@ class UserRegistrationView(generics.CreateAPIView):
         #     from_email=settings.DEFAULT_FROM_EMAIL,
         #     recipient_list=[user.email]
         # )
+
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def user_login(request):
+    """Handle user login and return JWT tokens"""
+    email = request.data.get('email')
+    password = request.data.get('password')
+    
+    user = authenticate(email=email, password=password)
+    
+    if user is not None:
+        if not user.is_email_verified:
+            return Response({
+                "error": "Please verify your email before logging in."
+            }, status=status.HTTP_403_FORBIDDEN)
+            
+        refresh = RefreshToken.for_user(user)
+        
+        return Response({
+            'message': 'Login successful',
+            'tokens': {
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            },
+            'user': {
+                'email': user.email,
+                'username': user.username
+            }
+        })
+    else:
+        return Response({
+            "error": "Invalid email or password"
+        }, status=status.HTTP_401_UNAUTHORIZED)
