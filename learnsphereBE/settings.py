@@ -76,8 +76,9 @@ WSGI_APPLICATION = 'learnsphereBE.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'learnsphere_db',
+        'ENFORCE_SCHEMA': True,
     }
 }
 
@@ -100,6 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = "userAuth.User"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
