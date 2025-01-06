@@ -71,3 +71,32 @@ def user_login(request):
         return Response({
             "error": "Invalid email or password"
         }, status=status.HTTP_401_UNAUTHORIZED)
+
+# @api_view(['GET'])
+# @permission_classes([AllowAny])
+# def verify_email(request, token):
+#     """Handle email verification"""
+#     try:
+#         user = User.objects.get(verification_token=token)
+#         if not user.is_email_verified:
+#             user.is_email_verified = True
+#             user.save()
+#             return Response({
+#                 "message": "Email verified successfully. You can now log in."
+#             })
+#         return Response({
+#             "message": "Email already verified."
+#         })
+#     except User.DoesNotExist:
+#         return Response({
+#             "error": "Invalid verification token."
+#         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    """Handle retrieving and updating user profile"""
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserProfileSerializer
+
+    def get_object(self):
+        return self.request.user.userprofile
