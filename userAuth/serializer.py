@@ -27,3 +27,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    """Handle user profile data"""
+    email = serializers.EmailField(source='user.email', read_only=True)
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = ('email', 'username', 'daily_goal_minutes', 'preferred_learning_time',
+                 'target_languages', 'notification_preferences')
