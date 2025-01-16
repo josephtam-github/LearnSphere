@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
 
+from userAuth.serializer import UserProfileSerializer, UserRegistrationSerializer
+
 class UserRegistrationView(generics.CreateAPIView):
     """Handle user registration"""
     permission_classes = (AllowAny,)
