@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djongo',
+    'rest_framework',
     'userAuth'
 ]
 
@@ -77,8 +79,13 @@ WSGI_APPLICATION = 'learnsphereBE.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'learnsphere_db',
-        'ENFORCE_SCHEMA': True,
+        'NAME': "learnsphere",
+        'CLIENT': {
+           "host": "mongodb+srv://learnsphereAdmin:learnsphere@learnsphere.gxhh6.mongodb.net",
+           "username": "learnsphereAdmin",
+           "password": "learnspherePassword",
+           "authMechanism": "SCRAM-SHA-1",
+        }, 
     }
 }
 
