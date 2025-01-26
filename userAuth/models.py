@@ -7,7 +7,7 @@ import uuid
 class User(AbstractUser):
     """Extended user model with additional fields for language learning platform"""
     email = models.EmailField(unique=True)
-    is_email_verified = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField(default=True) #CHANGE TO TRUE
     verification_token = models.UUIDField(default=uuid.uuid4, editable=False)
     date_of_birth = models.DateField(null=True)
     country = models.CharField(max_length=100, null=True)
