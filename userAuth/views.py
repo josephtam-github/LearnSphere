@@ -102,3 +102,16 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.userprofile
+
+
+class UserLogoutView(generics.DestroyAPIView):
+    """Handle user logout"""
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get('refresh')
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"message": str(e)},status=status.HTTP_400_BAD_REQUEST)
