@@ -2,7 +2,8 @@ from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, TokenBackendError
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.conf import settings
@@ -105,13 +106,25 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 class UserLogoutView(generics.DestroyAPIView):
-    """Handle user logout"""
+    """Handle user logout by blacklisting the refresh token"""
 
     def post(self, request):
+        refresh_token = request.data.get('refresh')
+        if not refresh_token:
+            return Response(
+                {"message": "Refresh token is required"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
         try:
-            refresh_token = request.data.get('refresh')
             token = RefreshToken(refresh_token)
             token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response({"message": str(e)},status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "Successfully logged out"},
+                status=status.HTTP_200_OK
+            )
+        except TokenError as e:
+            return Response(
+                {"message": "Invalid token"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
