@@ -1,40 +1,55 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import User, UserProfile
+from .models import Parent
 
-class UserRegistrationSerializer(serializers.ModelSerializer):
-    """Handle user registration with password validation"""
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+class ParentRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, 
+        required=True, 
+        validators=[validate_password],
+        style={'input_type': 'password'}
+    )
+    password_confirm = serializers.CharField(
+        write_only=True, 
+        required=True,
+        style={'input_type': 'password'}
+    )
     
     class Meta:
-        model = User
-        fields = ('email', 'username', 'password', 'password2', 'date_of_birth', 
-                 'country', 'native_language')
-        extra_kwargs = {
-            'email': {'required': True}
-        }
-
-    def validate(self, attrs):
-        """Validate password match and email format"""
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        model = Parent
+        fields = [
+            'email', 'username', 'password', 'password_confirm', 
+            'first_name', 'last_name', 'phone_number', 'date_of_birth',
+            'country', 'state'
+        ]
+    
+    def validate(self, data):
+        # Check that passwords match
+        if data['password'] != data['password_confirm']:
+            raise serializers.ValidationError({"password_confirm": "Passwords don't match"})
         
-        return attrs
-
+        # Validate parent age (must be 18+)
+        from datetime import date
+        min_age = 18
+        today = date.today()
+        date_of_birth = data.get('date_of_birth')
+        
+        if date_of_birth:
+            age = today.year - date_of_birth.year - ((today.month, today.day) < (date_of_birth.month, date_of_birth.day))
+            if age < min_age:
+                raise serializers.ValidationError({"date_of_birth": f"You must be at least {min_age} years old to register."})
+        
+        return data
+    
     def create(self, validated_data):
-        """Create new user with encrypted password"""
-        validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
-        return user
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
-    """Handle user profile data"""
-    email = serializers.EmailField(source='user.email', read_only=True)
-    username = serializers.CharField(source='user.username', read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = ('email', 'username', 'daily_goal_minutes', 'preferred_learning_time',
-                 'target_languages', 'notification_preferences')
+        # Remove password confirmation field
+        validated_data.pop('password_confirm')
+        
+        # Extract password to set separately
+        password = validated_data.pop('password')
+        
+        # Create user
+        parent = Parent(**validated_data)
+        parent.set_password(password)
+        parent.save()
+        return parent
