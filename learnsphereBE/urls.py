@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from learningCore.views import LanguageViewSet, LearningModuleViewSet
 from userAuth.views import ParentRegistrationView
-from userProfile.views import  ChildProgressViewSet, ChildViewSet, ParentSettingsView, DashboardView
+from userProfile.views import ChildProgressViewSet, ChildViewSet, ParentSettingsView, DashboardView
 from django.shortcuts import redirect
 
 def redirect_to_docs(request):
@@ -15,10 +15,8 @@ router.register(r'languages', LanguageViewSet, basename='language')
 router.register(r'modules', LearningModuleViewSet, basename='module')
 router.register(r'progress', ChildProgressViewSet, basename='progress')
 
-urlpatterns = [
-    # API Documentation redirect
-    path('', redirect_to_docs, name='api-docs'),
-    
+# API v1 patterns
+v1_patterns = [
     # Authentication endpoints
     path('register/', ParentRegistrationView.as_view(), name='parent-registration'),
     
@@ -30,4 +28,12 @@ urlpatterns = [
     
     # Include router URLs
     path('', include(router.urls)),
+]
+
+urlpatterns = [
+    # API Documentation redirect
+    path('', redirect_to_docs, name='api-docs'),
+    
+    # Version 1 API
+    path('v1/', include(v1_patterns)),
 ]
