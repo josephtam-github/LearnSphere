@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'userAuth'
+    'userAuth',
+    'userProfile',
+    'learningCore'
 ]
 
 MIDDLEWARE = [
@@ -116,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = "userAuth.User"
+AUTH_USER_MODEL = "userAuth.Parent"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
