@@ -1,25 +1,33 @@
-"""
-URL configuration for learnsphereBE project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
-from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import RedirectView
+from rest_framework.routers import DefaultRouter
+from learningCore.views import LanguageViewSet, LearningModuleViewSet
+from userAuth.views import ParentRegistrationView
+from userProfile.views import  ChildProgressViewSet, ChildViewSet, ParentSettingsView, DashboardView
+from django.shortcuts import redirect
+
+def redirect_to_docs(request):
+    return redirect('https://documenter.getpostman.com/view/24232846/2sAYX8KMrD')
+
+# Create a router for ViewSets
+router = DefaultRouter()
+router.register(r'children', ChildViewSet, basename='child')
+router.register(r'languages', LanguageViewSet, basename='language')
+router.register(r'modules', LearningModuleViewSet, basename='module')
+router.register(r'progress', ChildProgressViewSet, basename='progress')
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('v1/', include('userAuth.urls')),
-    path('', RedirectView.as_view(url='https://documenter.getpostman.com/view/24232846/2sAYX8KMrD', permanent=False))
+    # API Documentation redirect
+    path('', redirect_to_docs, name='api-docs'),
+    
+    # Authentication endpoints
+    path('register/', ParentRegistrationView.as_view(), name='parent-registration'),
+    
+    # Parent settings
+    path('settings/', ParentSettingsView.as_view(), name='parent-settings'),
+    
+    # Dashboard
+    path('dashboard/', DashboardView.as_view(), name='dashboard'),
+    
+    # Include router URLs
+    path('', include(router.urls)),
 ]
