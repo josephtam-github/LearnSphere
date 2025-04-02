@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from .models import Parent
 from django.core.mail import send_mail
+from django.utils.timezone import datetime
 
 class ParentRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -68,3 +69,33 @@ class ParentRegistrationSerializer(serializers.ModelSerializer):
         subject = "Verify Your Email with OTP"
         message = f"Your OTP code is {otp}. It will expire in 5 minutes."
         send_mail(subject, message, "noreply@learnsphere.com", [email])
+    
+    
+    # OTP Verification Serializer
+    class VerifyOTPSerializer(serializers.Serializer):
+        email = serializers.EmailField(required=True)
+        otp_code = serializers.CharField(max_length=6, required=True)
+        
+        def validate(self, data):
+            # Check if the OTP code is valid and not expired
+            try:
+                parent = Parent.objects.get(email=data['email'])
+            except Parent.DoesNotExist:
+                raise serializers.ValidationError({"email": "Email not registered."})
+            
+            if parent.otp_code != data['otp_code']:
+                raise serializers.ValidationError({"otp_code": "Invalid OTP code."})
+            
+            if parent.otp_expiry < datetime.now():
+                raise serializers.ValidationError({"otp_code": "OTP code has expired."})
+            
+            return data
+        
+        def save(self):
+            # Mark the email as verified
+            parent = Parent.objects.get(email=self.validated_data['email'])
+            parent.is_email_verified = True
+            parent.is_verified = True
+            parent.otp_code = None
+            parent.otp_expiry = None
+            parent.save()
