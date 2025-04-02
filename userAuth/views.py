@@ -25,6 +25,9 @@ class ParentRegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyOTPView(APIView):
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticated]
+    
     def post(self, request):
         serializer =VerifyOTPSerializer(data=request.data)
         if serializer.is_valid():
