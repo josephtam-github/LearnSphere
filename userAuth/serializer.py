@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from .models import Parent
+from django.core.mail import send_mail
 
 class ParentRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -52,5 +53,18 @@ class ParentRegistrationSerializer(serializers.ModelSerializer):
         # Create user
         parent = Parent(**validated_data)
         parent.set_password(password)
+        parent.is_verified = False
+        parent.generate_otp()
         parent.save()
+        
+        # Send OTP to email
+        
+        self.send_otp_email(parent.email, parent.otp_code)
+        
         return parent
+    
+    def send_otp_email(self, email, otp):
+        """Send OTP email to the user."""
+        subject = "Verify Your Email with OTP"
+        message = f"Your OTP code is {otp}. It will expire in 5 minutes."
+        send_mail(subject, message, "noreply@learnsphere.com", [email])
