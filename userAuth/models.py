@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from django_countries.fields import CountryField
 import random
 
-from django.utils.timezone import datetime, timedelta
+from django.utils.timezone import now, timedelta
 
 class Parent(AbstractUser):
     """Parent user model with authentication"""
@@ -22,7 +22,7 @@ class Parent(AbstractUser):
     
     # OTP Fields
     otp_code =models.CharField(max_length=6, null=True, blank=True)
-    otp_expiry = models.DataTimeField(null=True, blank=True)
+    otp_expiry = models.DateTimeField(null=True, blank=True)
         
     # Authentication fields
     USERNAME_FIELD = 'email'
@@ -41,6 +41,6 @@ class Parent(AbstractUser):
     
         
         self.otp_code = str(random.randint(100000, 999999))
-        self.otp_expiry = datetime.now() + timedelta(minutes=5)
+        self.otp_expiry = now() + timedelta(minutes=5)
         self.save()
      

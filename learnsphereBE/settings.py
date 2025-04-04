@@ -13,11 +13,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import environ
+import logging
 import os
 env = environ.Env()
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
+logging.basicConfig(level=logging.DEBUG)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -97,6 +99,19 @@ WSGI_APPLICATION = 'learnsphereBE.wsgi.application'
 #         }, 
 #     }
 # }
+
+EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_HOST="smtp.gmail.com"  
+EMAIL_PORT=env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS=True  
+EMAIL_HOST_USER ="godswillemmanueljames@gmail.com" 
+EMAIL_HOST_PASSWORD="qyfpudabrdeyepeu " 
+DEFAULT_FROM_EMAIL=EMAIL_HOST_USER  
+
+
+print("DATABASE_URL:", env("DATABASE_URL", default="Not Found"))
+print("SECRET_KEY:", env("SECRET_KEY", default="Not Found"))
 
 DATABASES = {
     'default': env.db('DATABASE_URL')

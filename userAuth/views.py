@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Count
 
 from .models import Parent
-from .serializer import ParentRegistrationSerializer, VerifyOTPSerializer
+from .serializer import  ParentRegistrationSerializer, VerifyOTPSerializer
 
 class ParentRegistrationView(APIView):
     permission_classes = [AllowAny]
