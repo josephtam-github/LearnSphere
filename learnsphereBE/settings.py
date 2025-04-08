@@ -100,8 +100,14 @@ WSGI_APPLICATION = 'learnsphereBE.wsgi.application'
 #     }
 # }
 
-EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+if os.getenv('DJANGO_ENV') == 'production':
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    # SMTP configs...
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 EMAIL_HOST="smtp.gmail.com"  
 EMAIL_PORT=env.int("EMAIL_PORT", default=587)
 EMAIL_USE_TLS = True 

@@ -22,8 +22,6 @@ class ParentRegistrationSerializer(serializers.ModelSerializer):
         model = Parent
         fields = [
             'email', 'username', 'password', 'password_confirm', 
-            'first_name', 'last_name', 'phone_number', 'date_of_birth',
-            'country', 'state'
         ]
     
     def validate(self, data):
@@ -32,15 +30,15 @@ class ParentRegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"password_confirm": "Passwords don't match"})
         
         # Validate parent age (must be 18+)
-        from datetime import date
-        min_age = 18
-        today = date.today()
-        date_of_birth = data.get('date_of_birth')
+        # from datetime import date
+        # min_age = 18
+        # today = date.today()
+        # date_of_birth = data.get('date_of_birth')
         
-        if date_of_birth:
-            age = today.year - date_of_birth.year - ((today.month, today.day) < (date_of_birth.month, date_of_birth.day))
-            if age < min_age:
-                raise serializers.ValidationError({"date_of_birth": f"You must be at least {min_age} years old to register."})
+        # if date_of_birth:
+        #     age = today.year - date_of_birth.year - ((today.month, today.day) < (date_of_birth.month, date_of_birth.day))
+        #     if age < min_age:
+        #         raise serializers.ValidationError({"date_of_birth": f"You must be at least {min_age} years old to register."})
         
         return data
     
@@ -98,6 +96,7 @@ class VerifyOTPSerializer(serializers.Serializer):
         parent.otp_code = None
         parent.otp_expiry = None
         parent.save()
+    
     
     
     
