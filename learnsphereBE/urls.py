@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from learningCore.views import LanguageViewSet, LearningModuleViewSet
-from userAuth.views import ParentRegistrationView
+from userAuth.views import ParentRegistrationView, VerifyOTPView
 from userProfile.views import ChildProgressViewSet, ChildViewSet, ParentSettingsView, DashboardView
 from django.shortcuts import redirect
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -21,6 +21,8 @@ v1_patterns = [
     # Authentication endpoints
     path('register/', ParentRegistrationView.as_view(), name='parent-registration'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('verify-otp/', VerifyOTPView.as_view(), name='verify-otp'),
+    
     
     # Parent settings
     path('settings/', ParentSettingsView.as_view(), name='parent-settings'),
