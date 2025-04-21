@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Avg, Count
 
 from .models import Parent
-from .serializer import  ParentRegistrationSerializer, VerifyOTPSerializer
+from .serializer import ParentRegistrationSerializer
 
 class ParentRegistrationView(APIView):
     permission_classes = [AllowAny]
@@ -23,17 +23,3 @@ class ParentRegistrationView(APIView):
                 'parent_id': parent.id
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class VerifyOTPView(APIView):
-    permission_classes = [AllowAny]
-    # permission_classes = [IsAuthenticated]
-    
-    def post(self, request):
-        serializer =VerifyOTPSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({
-                'message': 'Email verified successfully!'
-            }, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
