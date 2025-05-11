@@ -98,7 +98,4 @@ class VerifyOTPSerializer(serializers.Serializer):
         parent.save()
     
 
-# Check push
-# It is well
-# check    
 
