@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'userAuth',
     'userProfile',
-    'learningModules'
+    'learningModules',
+    'Gamification',
+    'Payment'
 ]
 
 MIDDLEWARE = [
