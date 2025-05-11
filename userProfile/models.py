@@ -5,8 +5,14 @@ from django.utils.translation import gettext_lazy as _
 from userAuth.models import Parent
 
 
-class Parentprofile(models.Model):
+class ParentProfile(models.Model):
     "parent profile management "
+    user = models.OneToOneField(Parent, on_delete=models.CASCADE)
+    
+    subscription_plan = models.CharField(choices=[("free", "Free"), ("premium", "Premium")])
+    
+    payment_verified = models.BooleanField(default=False)
+
 
 
 
