@@ -4,6 +4,8 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from userAuth.models import Parent
 
+from learningModules.models import LearningModule
+
 
 class ParentProfile(models.Model):
     "parent profile management "
@@ -24,6 +26,15 @@ class ChildProfile(models.Model):
 
 class ProgressTracking(models.Model):
     "Track child'd learning module and progress"
+    child = models.ForeignKey(ChildProfile, on_delete=models.CASCADE, related_name='progress')
+    
+    module = models.ForeignKey(LearningModule, on_delete=models.CASCADE)
+    
+    status = models.CharField(choices=[("not_started", "Not Started"), ("in_progress", "In Progress"), ("completed", "Completed")], max_length=20)
+    
+    score = models.IntegerField(null=True)
+    
+    last_updated = models.DateTimeField(auto_now=True)
 
 
 
