@@ -13,7 +13,13 @@ class ParentProfile(models.Model):
     
     payment_verified = models.BooleanField(default=False)
 
-
+class ChildProfile(models.Model):
+    "Child profile managed by parent"
+    parent = models.ForeignKey(ParentProfile, on_delete=models.CASCADE, related_name='children')
+    
+    age = models.IntegerField()
+    
+    language_level = models.CharField(max_length=20)
 
 
 
