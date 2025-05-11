@@ -22,6 +22,8 @@ class ChildProfile(models.Model):
     language_level = models.CharField(max_length=20)
 
 
+class ProgressTracking(models.Model):
+    "Track child'd learning module and progress"
 
 
 
