@@ -13,10 +13,7 @@ from django.utils.timezone import now, timedelta
 class Parent(AbstractUser):
     """Parent user model with authentication"""
     email = models.EmailField(unique=True)
-    # phone_number = models.CharField(max_length=15, null=True, blank=True)
-    # date_of_birth = models.DateField(null=True)
-    # country = CountryField(default='NG')  # Default to Nigeria
-    # state = models.CharField(max_length=50, blank=True, null=True)
+
     is_email_verified = models.BooleanField(default=False)
     verification_token = models.UUIDField(default=uuid.uuid4, editable=False)
     
