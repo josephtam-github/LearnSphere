@@ -10,6 +10,8 @@ import random
 
 from django.utils.timezone import now, timedelta
 
+import secrets
+
 class Parent(AbstractUser):
     """Parent user model with authentication"""
     email = models.EmailField(unique=True)
@@ -41,3 +43,13 @@ class Parent(AbstractUser):
         self.otp_expiry = now() + timedelta(minutes=5)
         self.save()
      
+class otpToken(models.Model):
+    """Model to store OTP tokens for users(parents)"""
+    
+    user = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    otp_code = models.CharField(max_length=6, default=secrets.token_hex(3))
+    otp_created_at = models.DateTimeField(auto_now_add=True)
+    otp_expires_at = models.DateTimeField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.user.username
