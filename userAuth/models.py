@@ -31,15 +31,15 @@ class Parent(AbstractUser):
         verbose_name_plural = 'parents'
         
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.email})"
+        return f"{self.username}  ({self.email})"
     
-    def generate_otp(self):
-        """Generate a 6-digit OTP code and set its expiry time."""
+    # def generate_otp(self):
+    #     """Generate a 6-digit OTP code and set its expiry time."""
     
         
-        self.otp_code = str(random.randint(100000, 999999))
-        self.otp_expiry = now() + timedelta(minutes=5)
-        self.save()
+    #     self.otp_code = str(random.randint(100000, 999999))
+    #     self.otp_expiry = now() + timedelta(minutes=5)
+    #     self.save()
     
      
 class OtpToken(models.Model):

@@ -10,7 +10,7 @@ from django.db.models import Avg, Count
 from .models import OtpToken
 from django.utils import timezone
 from .models import Parent
-from .serializer import  ParentRegistrationSerializer, VerifyOTPSerializer
+from .serializer import  ParentRegistrationSerializer
 from django.core.mail import send_mail
 
 from django.contrib.auth import get_user_model
@@ -33,6 +33,8 @@ class ParentRegistrationView(APIView):
                 'parent_id': parent.id
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get(self, request):
+        return Response({"message": "Send a POST request to register parent"}, status=status.HTTP_200_OK)
 
 # Verification view
 @api_view(['POST'])
