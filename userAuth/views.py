@@ -42,7 +42,7 @@ def verify_email(request, username):
     otp_input = request.data.get("otp")
     
     try:
-        user = User.objects.get(username=username)
+        user = Parent.objects.get(username=username)
         
         otp = OtpToken.objects.filter(user=user).last()
         

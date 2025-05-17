@@ -22,6 +22,12 @@ v1_patterns = [
     path('register/', ParentRegistrationView.as_view(), name='parent-registration'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     
+    path('verify-email/<str:username>/', verify_email, name='verify_email')
+
+    
+    
+    
+    
     # Parent settings
     # path('settings/', ParentSettingsView.as_view(), name='parent-settings'),
     

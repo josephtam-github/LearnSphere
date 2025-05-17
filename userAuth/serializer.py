@@ -27,8 +27,6 @@ class ParentRegistrationSerializer(serializers.ModelSerializer):
         if data['password'] != data['password_confirm']:
             raise serializers.ValidationError({"password_confirm": "Passwords don't match"})
         
-        # Validate parent age (must be 18+)
-        from datetime import date
       
         return data
     
