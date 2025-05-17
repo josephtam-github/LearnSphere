@@ -124,6 +124,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "userAuth.Parent"
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'godswillemmanueljames@gmail.com'
+EMAIL_HOST_PASSWORD = 'nhel scxn djup nqsy '
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -159,5 +168,5 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), #adjust as needed
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), #adjust as needed
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), #;adjust as needed
 }

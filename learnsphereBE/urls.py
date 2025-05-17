@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from userAuth.views import ParentRegistrationView
+from userAuth.views import ParentRegistrationView, verify_email, resend_otp
 # from userProfile.views import ChildProgressViewSet, ChildViewSet, ParentSettingsView, DashboardView
 from django.shortcuts import redirect
 from rest_framework_simplejwt.views import TokenObtainPairView

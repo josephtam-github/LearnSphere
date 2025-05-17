@@ -37,6 +37,6 @@ def create_otp_token(sender, instance, created, **kwargs):
                 subject, 
                 message, 
                 sender,
-                receiver, 
+                [receiver], 
                 fail_silently=False
-                )
+            )
