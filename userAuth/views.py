@@ -11,10 +11,13 @@ from .models import OtpToken
 from django.utils import timezone
 from .models import Parent
 from .serializer import  ParentRegistrationSerializer
-from django.core.mail import send_mail
+
+from .services import generate_and_send_otp
 
 from django.contrib.auth import get_user_model
-import secrets
+
+
+
 
 
 
@@ -35,6 +38,7 @@ class ParentRegistrationView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def get(self, request):
         return Response({"message": "Send a POST request to register parent"}, status=status.HTTP_200_OK)
+
 
 # Verification view
 @api_view(['POST'])
@@ -64,38 +68,10 @@ def resend_otp(request):
     try:
         user =User.objects.get(email=email)
         
-        # To generate new OTP
-        
-        otp = OtpToken.objects.create(
-            user=user,
-            otp_code=secrets.token_hex(3),
-            otp_expires_at=timezone.now() + timezone.timedelta(minutes=5)
-        )
-        
-        subject = "Resend Email Verification "
-        message = f"""
-        
-        Hi {user.username}, your new OTP is {otp.otp_code}. It expires in 5 minutes.
-        http://127.0.0.1:8000/verify-email/{user.username}
-        """
-        sender = "godswillemmanueljames@gmail.com"
-        send_mail(subject, message, sender, [user.email])
+        otp = generate_and_send_otp(user)
         
         return Response({"message": "OTP resent successfully"})
     
     except User.DoesNotExist:
         return Response({"error": "User not found."}, status=404)
 
-# class VerifyOTPView(APIView):
-#     permission_classes = [AllowAny]
-#     # permission_classes = [IsAuthenticated]
-    
-#     def post(self, request):
-#         serializer =VerifyOTPSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response({
-#                 'message': 'Email verified successfully!'
-#             }, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
