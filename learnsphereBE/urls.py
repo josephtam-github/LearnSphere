@@ -23,6 +23,8 @@ v1_patterns = [
     path('token/refresh', TokenRefreshView.as_view, name='token refresh'),
     
     path('verify-email/<str:username>/', verify_email, name='verify_email')
+    
+    ##
 
     
     
